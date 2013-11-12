@@ -25,7 +25,7 @@ type Host struct {
 	Error     string        `json:"error"`
 	Name      string        `json:"name"`
 	Status    StatusType    `json:"status"`
-	Proxy     string        `json:"proxy_hostid,omitempty"`
+	ProxyId   string        `json:"proxy_hostid,omitempty"`
 
 	// Fields below used only when creating hosts
 	GroupIds   HostGroupIds   `json:"groups,omitempty"`
