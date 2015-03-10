@@ -70,6 +70,11 @@ func NewAPI(url string) (api *API) {
 	return &API{url: url, c: http.Client{}}
 }
 
+// Allows one to use specific http.Client, for example with InsecureSkipVerify transport.
+func (api *API) SetClient(c *http.Client) {
+	api.c = *c
+}
+
 func (api *API) printf(format string, v ...interface{}) {
 	if api.Logger != nil {
 		api.Logger.Printf(format, v...)
@@ -95,6 +100,7 @@ func (api *API) callBytes(method string, params interface{}) (b []byte, err erro
 
 	res, err := api.c.Do(req)
 	if err != nil {
+		api.printf("Error   : %s", err)
 		return
 	}
 	defer res.Body.Close()
@@ -123,10 +129,10 @@ func (api *API) CallWithError(method string, params interface{}) (response Respo
 	return
 }
 
-// Calls "user.authenticate" API method and fills api.Auth field.
+// Calls "user.login" API method and fills api.Auth field.
 func (api *API) Login(user, password string) (auth string, err error) {
 	params := map[string]string{"user": user, "password": password}
-	response, err := api.CallWithError("user.authenticate", params)
+	response, err := api.CallWithError("user.login", params)
 	if err != nil {
 		return
 	}
