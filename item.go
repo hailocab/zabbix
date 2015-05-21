@@ -118,33 +118,25 @@ func (api *API) ItemsCreate(items Items) (err error) {
 }
 
 // Wrapper for item.update: https://www.zabbix.com/documentation/2.0/manual/appendix/api/item/update
-func (api *API) ItemsUpdate(items Items) (err error) {
-	response, err := api.CallWithError("item.update", items)
+func (api *API) ItemsUpdate(params Params) (err error) {
+	_, err = api.CallWithError("item.update", params)
 	if err != nil {
 		return
 	}
 
-	result := response.Result.(map[string]interface{})
-	itemids := result["itemids"].([]interface{})
-	for i, id := range itemids {
-		items[i].ItemId = id.(string)
-	}
 	return
 }
 
 // Wrapper for item.exists: https://www.zabbix.com/documentation/2.0/manual/appendix/api/item/exists
-func (api *API) ItemsExists(items Items) (err error) {
+func (api *API) ItemsExists(items Items) (bool, error) {
 	response, err := api.CallWithError("item.exists", items)
 	if err != nil {
-		return
+		return false, err
 	}
 
-	result := response.Result.(map[string]interface{})
-	itemids := result["itemids"].([]interface{})
-	for i, id := range itemids {
-		items[i].ItemId = id.(string)
-	}
-	return
+	result := response.Result.(bool)
+
+	return result, err
 }
 
 // Wrapper for item.delete: https://www.zabbix.com/documentation/2.0/manual/appendix/api/item/delete
