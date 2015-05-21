@@ -117,6 +117,21 @@ func (api *API) ItemsCreate(items Items) (err error) {
 	return
 }
 
+// Wrapper for item.update: https://www.zabbix.com/documentation/2.0/manual/appendix/api/item/update
+func (api *API) ItemsUpdate(items Items) (err error) {
+	response, err := api.CallWithError("item.update", items)
+	if err != nil {
+		return
+	}
+
+	result := response.Result.(map[string]interface{})
+	itemids := result["itemids"].([]interface{})
+	for i, id := range itemids {
+		items[i].ItemId = id.(string)
+	}
+	return
+}
+
 // Wrapper for item.delete: https://www.zabbix.com/documentation/2.0/manual/appendix/api/item/delete
 // Cleans ItemId in all items elements if call succeed.
 func (api *API) ItemsDelete(items Items) (err error) {
