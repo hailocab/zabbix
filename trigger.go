@@ -22,6 +22,18 @@ type Trigger struct {
 	Priority    PriorityType `json:"priority,omitempty"`
 }
 
+// Wrapper for trigger.eists: https://www.zabbix.com/documentation/2.0/manual/appendix/api/trigger/exists
+func (api *API) TriggerExists(trigger Trigger) (bool, error) {
+	response, err := api.CallWithError("trigger.exists", trigger)
+	if err != nil {
+		return false, err
+	}
+
+	result := response.Result.(bool)
+
+	return result, err
+}
+
 // Wrapper for trigger.create: https://www.zabbix.com/documentation/2.0/manual/appendix/api/trigger/create
 func (api *API) TriggerCreate(trigger Trigger) (err error) {
 	response, err := api.CallWithError("trigger.create", trigger)
