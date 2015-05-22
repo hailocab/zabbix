@@ -145,3 +145,15 @@ func (api *API) HostsDeleteByIds(ids []string) (err error) {
 	}
 	return
 }
+
+// Wrapper for host.eists: https://www.zabbix.com/documentation/2.0/manual/appendix/api/host/exists
+func (api *API) HostExists(host Host) (bool, error) {
+	response, err := api.CallWithError("host.exists", host)
+	if err != nil {
+		return false, err
+	}
+
+	result := response.Result.(bool)
+
+	return result, err
+}
