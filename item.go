@@ -63,6 +63,7 @@ type Item struct {
 	Error       string    `json:"error"`
 	History     int       `json:"history,omitempty"`
 	Trends      int       `json:"trends,omitempty"`
+	Params      string    `json:"params,omitempty"`
 
 	// Fields below used only when creating applications
 	ApplicationIds []string `json:"applications,omitempty"`
